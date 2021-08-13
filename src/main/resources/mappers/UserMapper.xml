@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzu.dao.UserMapper">
+    <select id="login" parameterType="com.suzu.pojo.PlainUser" resultType="int">
+        select count(*)
+        from suzu_plain_user
+        where user_nick = #{username}
+          and user_password = #{password}
+    </select>
+
+    <insert id="register" parameterType="com.suzu.pojo.PlainUser">
+        insert into suzu_plain_user (user_nick, user_password)
+        values (#{username}, #{password});
+        insert into suzu_user_icon(user_no)
+            value ((select user_no from suzu_plain_user where user_nick = #{username}))
+    </insert>
+
+    <select id="isUserRegistered" parameterType="java.lang.String" resultType="int">
+        select count(*)
+        from suzu_plain_user
+        where user_nick = #{username}
+    </select>
+
+    <select id="verityPassword" parameterType="java.lang.String" resultType="java.lang.String">
+        select user_password
+        from suzu_plain_user
+        where user_nick = #{username}
+    </select>
+
+    <select id="getProfileByUsername" parameterType="java.lang.String" resultMap="queryUser">
+        select user_gender, user_sign, user_icon_url
+        from suzu_plain_user as user, suzu_user_icon as icon
+        where user_nick = #{username} and user.user_no = icon.user_no;
+    </select>
+
+    <select id="getProfileByID" parameterType="java.lang.Integer" resultMap="queryUser">
+        select user_gender, user_sign, user_icon_url, user_nick
+        from suzu_plain_user as user, suzu_user_icon as icon
+        where user.user_no = #{userID} and icon.user_no = user.user_no
+    </select>
+
+    <select id="getFriendsIDAndConversationToken" parameterType="java.lang.String" resultMap="conversationToken" >
+        select user_subscriber, user_conversation_token
+        from suzu_user_subscribe as subs,
+             suzu_plain_user as user
+        where user_subscribe_to = user.user_no
+          and user.user_nick = #{username}
+        union
+        select user_subscribe_to, user_conversation_token
+        from suzu_user_subscribe as subs,
+             suzu_plain_user as user
+        where user_subscriber = user.user_no
+          and user.user_nick = #{username}
+    </select>
+
+    <select id="getUserList" resultMap="queryUser">
+        select user_nick, user_gender, user_sign
+        from suzu_plain_user
+        where user_nick not like #{currentUsername}
+        limit #{listIndex}, #{num}
+    </select>
+
+    <select id="getUserIDByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select user_no
+        from suzu_plain_user
+        where user_nick = #{username}
+    </select>
+
+    <resultMap id="conversationToken" type="com.suzu.pojo.UserConversationToken">
+        <id column="user_subscriber" property="userID" />
+        <result column="user_conversation_token" property="token" />
+    </resultMap>
+
+    <resultMap id="queryUser" type="com.suzu.pojo.PlainUser" >
+        <result column="user_nick" property="username" />
+        <result column="user_gender" property="gender" />
+        <result column="user_sign" property="sign" />
+        <result column="user_icon_url" property="userIconURL" />
+    </resultMap>
+</mapper>

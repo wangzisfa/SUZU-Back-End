@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzu.dao.MessageMapping">
+    <insert id="insertOne">
+        insert into suzu_user_message(user_no_send, user_no_to, message_content)
+        values(#{messageSenderID}, #{messageToID}, #{message})
+    </insert>
+
+
+</mapper>
