@@ -73,6 +73,12 @@
         where user_nick = #{username}
     </select>
 
+    <select id="getUserListByUsername" parameterType="java.lang.String" resultMap="queryUser">
+        select user_nick, user_sign, user_gender
+        from suzu_plain_user
+        where user_nick like CONCAT('%', #{username}, '%')
+    </select>
+
     <resultMap id="conversationToken" type="com.suzu.pojo.UserConversationToken">
         <id column="user_subscriber" property="userID" />
         <result column="user_conversation_token" property="token" />

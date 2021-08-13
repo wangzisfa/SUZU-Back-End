@@ -21,4 +21,5 @@ public interface UserMapper {
 	List<PlainUser> getUserList(Integer listIndex, Integer num, String currentUsername);
 	int getUserIDByUsername(String username);
 	int insertSubscribeUser(Integer userSubscriberID, Integer SubscribeToID, String generatedSubscribeToken);
+	List<PlainUser> getUserListByUsername(String username);
 }

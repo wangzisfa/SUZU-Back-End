@@ -11,11 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-public class FriendController {
+public class SubscribeController {
 	@Autowired
 	private UserService userService;
 
@@ -57,4 +58,10 @@ public class FriendController {
 
 	}
 
+
+	@GetMapping("/search")
+	@ResponseBody
+	public List<PlainUser> fuzzySearchByUsername(@RequestParam("username") String username) {
+		return userService.fuzzySearchByUsername(username);
+	}
 }

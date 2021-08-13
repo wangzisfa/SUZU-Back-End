@@ -91,4 +91,9 @@ public class UserServiceImpl implements UserService {
 		return mapper.insertSubscribeUser(userID, subscribeID, token);
 	}
 
+	@Override
+	public List<PlainUser> fuzzySearchByUsername(String username) {
+		return mapper.getUserListByUsername(username);
+	}
+
 }

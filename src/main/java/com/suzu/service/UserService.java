@@ -13,4 +13,5 @@ public interface UserService {
 	List<UserConversationToken> getFriends(String username);
 	List<PlainUser> getAll(Integer listIndex, Integer listItemNum, String currentUsername);
 	Integer subscribeOne(String username, String subscribeToUsername, String token);
+	List<PlainUser> fuzzySearchByUsername(String username);
 }
