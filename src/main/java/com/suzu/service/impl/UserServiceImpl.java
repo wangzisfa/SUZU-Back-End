@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserConversationToken> getFriends(String username) {
+		System.out.println(username);
 		List<UserConversationToken> list = mapper.getFriendsIDAndConversationToken(username);
 		System.out.println(list);
 		List<PlainUser> userList = new ArrayList<>();
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
 			userConversationToken.setUser(mapper.getProfileByID(userConversationToken.getUserID()));
 		}
 
-		System.out.println(userList);
+		System.out.println("current userConversationList is :    " + list);
 		return list;
 	}
 
@@ -81,4 +82,13 @@ public class UserServiceImpl implements UserService {
 //		System.out.println(list);
 		return list;
 	}
+
+	@Override
+	public Integer subscribeOne(String username, String subscribeToUsername, String token) {
+		int userID = mapper.getUserIDByUsername(username);
+		int subscribeID = mapper.getUserIDByUsername(subscribeToUsername);
+
+		return mapper.insertSubscribeUser(userID, subscribeID, token);
+	}
+
 }

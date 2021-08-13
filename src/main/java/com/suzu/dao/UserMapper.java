@@ -20,4 +20,5 @@ public interface UserMapper {
 //	去掉当前用户的用户列表
 	List<PlainUser> getUserList(Integer listIndex, Integer num, String currentUsername);
 	int getUserIDByUsername(String username);
+	int insertSubscribeUser(Integer userSubscriberID, Integer SubscribeToID, String generatedSubscribeToken);
 }

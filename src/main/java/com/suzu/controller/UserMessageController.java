@@ -2,6 +2,7 @@ package com.suzu.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.suzu.pojo.StrangerMessage;
 import com.suzu.pojo.UserMessage;
 import com.suzu.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,40 @@ public class UserMessageController {
 //		template.convertAndSend("/topic/user/message/" + );
 //.WebSocketAnnotationMethodMessageHandler : No matching message handler methods.
 //		System.out.println("message: " + message + "\n current subs" + subscriberUsername);
-//		System.out.println("token:     " + token);
+		System.out.println("token:     " + token);
 //		System.out.println("message:      " + message);
 
 		JSONObject object = JSONObject.parseObject(message);
-		UserMessage userMessage = object.toJavaObject(UserMessage.class);
-		if (service.insertOne(userMessage) == 1) {
-			System.out.println("数据库插入成功");
+
+		if (object.getBoolean("stranger") != null) {
+			StrangerMessage strangerMessage = new StrangerMessage();
+			strangerMessage.setMessage(object.getString("message"));
+			strangerMessage.setMessageSenderName(object.getString("messageSender"));
+			strangerMessage.setToken(token);
+
+			System.out.println(strangerMessage);
+			System.out.println("陌生人聊天模式");
+
+			int messageTokenInsertStatus = service.insertOneStrangerMessageToken(token);
+			if (messageTokenInsertStatus == -1) {
+				System.out.println("陌生人聊天 token 插入时出现问题");
+			} else {
+				if (service.insertOneStrangerMessage(strangerMessage) == 1) {
+					System.out.println("一条陌生人聊天消息插入成功");
+				} else {
+					System.out.println("陌生人聊天消息插入失败");
+				}
+			}
 		} else {
-			System.out.println("插入好像有点问题");
+			UserMessage userMessage = object.toJavaObject(UserMessage.class);
+			if (service.insertOne(userMessage) == 1) {
+				System.out.println("数据库插入成功");
+			} else {
+				System.out.println("插入好像有点问题");
+			}
 		}
+
+
 
 		return message;
 	}

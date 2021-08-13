@@ -12,4 +12,5 @@ public interface UserService {
 	PlainUser getProfile(String username);
 	List<UserConversationToken> getFriends(String username);
 	List<PlainUser> getAll(Integer listIndex, Integer listItemNum, String currentUsername);
+	Integer subscribeOne(String username, String subscribeToUsername, String token);
 }

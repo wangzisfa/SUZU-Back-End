@@ -17,6 +17,11 @@
             value ((select user_no from suzu_plain_user where user_nick = #{username}))
     </insert>
 
+    <insert id="insertSubscribeUser" >
+        insert into suzu_user_subscribe(user_subscriber, user_subscribe_to, user_conversation_token)
+        values (#{userSubscriberID}, #{SubscribeToID}, #{generatedSubscribeToken})
+    </insert>
+
     <select id="isUserRegistered" parameterType="java.lang.String" resultType="int">
         select count(*)
         from suzu_plain_user

@@ -7,6 +7,8 @@ import com.suzu.pojo.PlainUserDTO;
 import com.suzu.service.UserService;
 import com.suzu.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,4 +40,21 @@ public class FriendController {
 
 		return tokenService.generateToken(user, false);
 	}
+
+	@GetMapping("/subscribeUser")
+	@ResponseBody
+	public ResponseEntity<Object> subscribeOne(@RequestParam("subscribeName") String username,
+	                                           @RequestParam("subscribeTo") String subscribeToUsername) {
+		PlainUserDTO user = new PlainUserDTO();
+		user.setUsername(username);
+		String token = tokenService.generateToken(user, false);
+		System.out.println("token   " + token);
+
+		System.out.println(username + "        " + subscribeToUsername);
+		return userService.subscribeOne(username, subscribeToUsername, token) == 1 ?
+				new ResponseEntity<>("success", HttpStatus.OK) :
+				new ResponseEntity<>("bad request", HttpStatus.BAD_REQUEST);
+
+	}
+
 }
