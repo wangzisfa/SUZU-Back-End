@@ -79,6 +79,24 @@
         where user_nick like CONCAT('%', #{username}, '%')
     </select>
 
+    <update id="updateUsernameByUsername" >
+        update suzu_plain_user
+        set user_nick = #{username}
+        where user_nick = #{originUsername}
+    </update>
+
+    <update id="updateGenderByUsername">
+        update suzu_plain_user
+        set user_gender = #{gender}
+        where user_nick = #{username}
+    </update>
+
+    <update id="updateSignByUsername">
+        update suzu_plain_user
+        set user_sign = #{sign}
+        where user_nick = #{username}
+    </update>
+
     <resultMap id="conversationToken" type="com.suzu.pojo.UserConversationToken">
         <id column="user_subscriber" property="userID" />
         <result column="user_conversation_token" property="token" />

@@ -16,6 +16,9 @@ public interface UserMapper {
 	String verityPassword(String username);
 	PlainUser getProfileByUsername(String username);
 	PlainUser getProfileByID(Integer userID);
+	int updateUsernameByUsername(String username, String originUsername);
+	int updateGenderByUsername(String username, String gender);
+	int updateSignByUsername(String username, String sign);
 	List<UserConversationToken> getFriendsIDAndConversationToken(String username);
 //	去掉当前用户的用户列表
 	List<PlainUser> getUserList(Integer listIndex, Integer num, String currentUsername);

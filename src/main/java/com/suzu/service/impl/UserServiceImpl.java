@@ -60,6 +60,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public String updateProfileByUsername(PlainUser user, String originUsername) {
+		if (user.getUsername() != null) {
+			if (mapper.isUserRegistered(user.getUsername()) == 1) {
+				return "username is not available";
+			}
+			mapper.updateUsernameByUsername(user.getUsername(), originUsername);
+		}
+		if (user.getGender() != null) {
+			mapper.updateGenderByUsername(originUsername, user.getGender());
+		}
+		if (user.getSign() != null) {
+			mapper.updateSignByUsername(originUsername, user.getSign());
+		}
+
+		return "success";
+	}
+
+	@Override
 	public List<UserConversationToken> getFriends(String username) {
 		System.out.println(username);
 		List<UserConversationToken> list = mapper.getFriendsIDAndConversationToken(username);
